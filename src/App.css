@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  height: 100vh;
 }
 
 .App-logo {
@@ -34,5 +35,22 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.inline-code-cus {
+  background-color: rgb(219, 219, 219);
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+.tools-button > button {
+  margin-right: 1em;
+  margin-bottom: 0.5em;
+}
+@keyframes myping {
+  75%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
   }
 }
