@@ -1,4 +1,4 @@
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import type { Message } from "../types";
 function ConversationList({
@@ -15,6 +15,14 @@ function ConversationList({
 }) {
   return (
     <>
+      <div
+        className=" border-dashed flex justify-center items-center p-2 m-2 border border-light-900 rounded hover:bg-gray-200 cursor-pointer"
+        onClick={() => {
+          onChangeConversation(null);
+        }}
+      >
+        <PlusIcon className="h-5 w-5"></PlusIcon>
+      </div>
       {conversation.map((item, index) => (
         <div
           className="flex justify-center items-center p-2 m-2 border border-light-900 rounded hover:bg-gray-200 "

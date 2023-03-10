@@ -7,6 +7,18 @@ import { Conversation } from "./components/ConversationList";
 import { ForwardRefStub } from "./components/Stub";
 import { Message } from "./types";
 
+const iniChat = [
+  {
+    role: "system",
+    content:
+      '我希望你扮演英文翻译官，仅当{{your content here}}是"translate:"开头时才翻译文本，并且保持原意，不需要解释，仅当{{your content here}}是"translate:"开头时才翻译文本；',
+  },
+  {
+    role: "assistant",
+    content: "Hello! How may I assist you today?",
+  },
+];
+
 function App() {
   const textRef = useRef<HTMLTextAreaElement>(
     document.createElement("textarea")
@@ -26,6 +38,11 @@ function App() {
       }
     }
     return rn;
+  };
+
+  const getKey = () => {
+    const randomstring = require("randomstring");
+    return "local-conversation:" + randomstring.generate();
   };
 
   const makeReq = async () => {
@@ -52,8 +69,7 @@ function App() {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer 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",
+        Authorization: "Bearer " + process.env.REACT_APP_OPENAI_API_KEY,
       },
       onmessage(ev) {
         if (ev.data === "[DONE]") {
@@ -103,8 +119,13 @@ function App() {
       }>;
       key: string;
     }) => {
-      setLocalStorageKey(item.key);
-      setChat(item.data);
+      if (!item) {
+        setLocalStorageKey(getKey());
+        setChat(iniChat);
+      } else {
+        setLocalStorageKey(item.key);
+        setChat(item.data);
+      }
     },
     []
   );
@@ -117,26 +138,13 @@ function App() {
     []
   );
 
-  const [localStorageKey, setLocalStorageKey] = useState(() => {
-    const randomstring = require("randomstring");
-    return "local-conversation:" + randomstring.generate();
-  });
+  const [localStorageKey, setLocalStorageKey] = useState(getKey());
 
   let [localConversation, setLocalConversation]: any = useState(() =>
     getLocalItems()
   );
 
-  const [chat, setChat] = useState<Array<Message>>([
-    {
-      role: "system",
-      content:
-        '我希望你扮演英文翻译官，仅当{{your content here}}是"translate:"开头时才翻译文本，并且保持原意，不需要解释，仅当{{your content here}}是"translate:"开头时才翻译文本；',
-    },
-    {
-      role: "assistant",
-      content: "Hello! How may I assist you today?",
-    },
-  ]);
+  const [chat, setChat] = useState<Array<Message>>(iniChat);
   // const [chat, setChat] = useState(data);
   const [composition, setComposition] = useState(false);
   const [waitReply, setWaitReply] = useState(false);
