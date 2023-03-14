@@ -93,7 +93,6 @@ function App() {
         Authorization: "Bearer " + process.env.REACT_APP_OPENAI_API_KEY,
       },
       onmessage(ev) {
-        console.log(ev);
         if (ev.data === "[DONE]") {
           onReachEnd(sse);
         } else {
