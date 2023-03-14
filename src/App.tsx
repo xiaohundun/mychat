@@ -7,6 +7,10 @@ import { Conversation } from "./components/ConversationList";
 import { ForwardRefStub } from "./components/Stub";
 import { Message } from "./types";
 
+const controller = new AbortController();
+const signal = controller.signal;
+let sse = "";
+
 const iniChat = [
   {
     role: "system",
@@ -45,10 +49,25 @@ function App() {
     return "local-conversation:" + randomstring.generate();
   };
 
+  const onReachEnd = (inStr?: string) => {
+    const msg = inStr || sse;
+    setChat((old) => {
+      const newAry = [
+        ...old,
+        {
+          role: "assistant",
+          content: msg,
+        },
+      ];
+      localStorage.setItem(localStorageKey, JSON.stringify(newAry));
+      setLocalConversation(getLocalItems());
+      return newAry;
+    });
+  };
   const makeReq = async () => {
     if (waitReply) return;
     if (!textRef.current.value) return;
-    let sse = "";
+    sse = "";
     const newAry = [
       ...chat,
       { role: "user", content: textRef.current?.value || "" },
@@ -64,27 +83,19 @@ function App() {
       }),
       stream: true,
     };
+
     await fetchEventSource("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       body: JSON.stringify(data),
+      signal: signal,
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + process.env.REACT_APP_OPENAI_API_KEY,
       },
       onmessage(ev) {
+        console.log(ev);
         if (ev.data === "[DONE]") {
-          setChat((old) => {
-            const newAry = [
-              ...old,
-              {
-                role: "assistant",
-                content: sse,
-              },
-            ];
-            localStorage.setItem(localStorageKey, JSON.stringify(newAry));
-            setLocalConversation(getLocalItems());
-            return newAry;
-          });
+          onReachEnd(sse);
         } else {
           const msg = JSON.parse(ev.data);
           if (msg.choices[0].delta.content) {
@@ -216,31 +227,45 @@ function App() {
                 setComposition(false);
               }}
             ></textarea>
-            <button
-              onClick={makeReq}
-              className="absolute p-1 rounded-md text-gray-500 bottom-0 hover:bg-gray-100 top-0 right-0"
-            >
-              <svg
-                stroke="currentColor"
-                fill="none"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-4 w-4 m-2"
-                style={{
-                  animation: `${
-                    waitReply && "myping 1s cubic-bezier(0, 0, 0.2, 1) infinite"
-                  }`,
+            {waitReply ? (
+              <button
+                className="absolute p-1 rounded-md text-gray-500 bottom-0 hover:bg-gray-100 top-0 right-0"
+                onClick={() => {
+                  controller.abort("user abort");
+                  onReachEnd();
+                  setWaitReply(false);
                 }}
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
               >
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
+                停止响应
+              </button>
+            ) : (
+              <button
+                onClick={makeReq}
+                className="absolute p-1 rounded-md text-gray-500 bottom-0 hover:bg-gray-100 top-0 right-0"
+              >
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4 m-2"
+                  style={{
+                    animation: `${
+                      waitReply &&
+                      "myping 1s cubic-bezier(0, 0, 0.2, 1) infinite"
+                    }`,
+                  }}
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </div>
