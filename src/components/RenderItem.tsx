@@ -1,8 +1,8 @@
 import { ComputerDesktopIcon, UserIcon } from "@heroicons/react/24/outline";
+import React from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import type { Message } from "../types";
-
 function Item({ item, index }: { index: number; item: Message }) {
   const inferLang = (content: string) => {
     const match = content.match("^(.*)\\s");
@@ -105,4 +105,4 @@ function Item({ item, index }: { index: number; item: Message }) {
     </div>
   );
 }
-export default Item;
+export const ItemMemo = React.memo(Item);
