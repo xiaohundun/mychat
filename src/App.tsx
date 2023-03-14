@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-import { Chat } from "./components/ChatList";
+import Chat from "./components/ChatList";
 // import data from "./test.json";
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Conversation } from "./components/ConversationList";
@@ -200,10 +200,7 @@ function App() {
           ref={msgContainerRef}
           style={{}}
         >
-          <Chat
-            ref={stubRef}
-            chat={chat.filter((item) => item.role !== "system")}
-          >
+          <Chat chat={chat.filter((item) => item.role !== "system")}>
             {waitReply && <ForwardRefStub ref={stubRef}></ForwardRefStub>}
           </Chat>
         </div>
