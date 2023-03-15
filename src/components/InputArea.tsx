@@ -53,7 +53,7 @@ function InputArea({
       ) : (
         <button
           onClick={makeReq}
-          className="absolute p-1 rounded-md text-gray-500 bottom-0 hover:bg-gray-100 top-0 right-0"
+          className="absolute p-1 text-gray-500 bottom-0 hover:bg-gray-100 top-0 right-0"
         >
           <svg
             stroke="currentColor"

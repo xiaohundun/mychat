@@ -37,6 +37,16 @@
     transform: rotate(360deg);
   }
 }
+@keyframes dots-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(1.5);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
 
 .inline-code-cus {
   background-color: rgb(219, 219, 219);

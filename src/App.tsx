@@ -75,7 +75,7 @@ function App() {
     ];
     textRef.current.value = "";
     setChat(newAry);
-
+    setWaitReply(true);
     const data = {
       model: "gpt-3.5-turbo",
       messages: newAry.map((item) => {
@@ -111,12 +111,15 @@ function App() {
         }
       },
       async onopen() {
-        setWaitReply(true);
+        setStreamOpened(true);
       },
       onclose() {
+        setStreamOpened(false);
         setWaitReply(false);
       },
       onerror(err) {
+        setWaitReply(false);
+        setStreamOpened(false);
         throw err;
       },
     });
@@ -159,6 +162,7 @@ function App() {
   // const [chat, setChat] = useState(data);
   const [composition, setComposition] = useState(false);
   const [waitReply, setWaitReply] = useState(false);
+  const [streamOpened, setStreamOpened] = useState(false);
 
   useEffect(() => {
     msgContainerRef.current.scrollTo({
@@ -197,7 +201,12 @@ function App() {
           style={{}}
         >
           <Chat chat={chat.filter((item) => item.role !== "system")}>
-            {waitReply && <ForwardRefStub ref={stubRef}></ForwardRefStub>}
+            {waitReply && (
+              <ForwardRefStub
+                ref={stubRef}
+                streamOpened={streamOpened}
+              ></ForwardRefStub>
+            )}
           </Chat>
         </div>
         <div className="flex-none mx-4 mt-4 mb-2">
