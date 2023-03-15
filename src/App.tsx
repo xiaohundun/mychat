@@ -176,9 +176,8 @@ function App() {
     >
       <div
         id="left"
-        className="bg-white flex flex-col"
+        className="bg-white flex flex-col overflow-hidden w-0 md:w-1/5"
         style={{
-          minWidth: "18vw",
           minHeight: "100vh",
         }}
       >
@@ -190,13 +189,10 @@ function App() {
       </div>
       <div
         id="chat"
-        className="flex flex-col scroll-smooth h-full"
-        style={{
-          minWidth: "82vw",
-        }}
+        className="flex flex-col scroll-smooth h-full w-full md:w-4/5"
       >
         <div
-          className="px-5 md:px-0 relative mx-4 overflow-y-scroll grow"
+          className="px-0 relative mx-0 overflow-y-scroll grow"
           ref={msgContainerRef}
           style={{}}
         >

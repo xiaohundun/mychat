@@ -63,11 +63,6 @@ function InputArea({
             strokeLinecap="round"
             strokeLinejoin="round"
             className="h-4 w-4 m-2"
-            style={{
-              animation: `${
-                waitReply && "myping 1s cubic-bezier(0, 0, 0.2, 1) infinite"
-              }`,
-            }}
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"

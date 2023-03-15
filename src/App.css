@@ -47,10 +47,12 @@
   margin-right: 1em;
   margin-bottom: 0.5em;
 }
-@keyframes myping {
-  75%,
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
+
+.content-bubble {
+  max-width: 68%;
+}
+@media only screen and (max-width: 640px) {
+  .content-bubble {
+    max-width: 82%;
   }
 }

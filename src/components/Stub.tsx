@@ -12,7 +12,6 @@ export const ForwardRefStub = forwardRef(function stub(
         ref={ref}
         style={{
           textAlign: "left",
-          maxWidth: "68%",
           backgroundColor: "white",
         }}
         className={`break-words rounded-xl p-2 content-bubble whitespace-pre-wrap`}

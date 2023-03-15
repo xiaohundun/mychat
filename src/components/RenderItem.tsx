@@ -91,12 +91,9 @@ function Item({ item, index }: { index: number; item: Message }) {
       <div
         style={{
           textAlign: "left",
-          maxWidth: "68%",
           backgroundColor: item.role === "user" ? "rgb(169,234,122)" : "white",
         }}
-        className={`break-words rounded-xl p-2 content-bubble whitespace-pre-wrap ${
-          item.role === "user" ? "content-bubble-right" : "content-bubble-left"
-        }`}
+        className={`break-words rounded-xl p-2 content-bubble whitespace-pre-wrap`}
       >
         {item.content.includes("```")
           ? renderCode(item.content)
