@@ -14,11 +14,6 @@ let sse = "";
 
 const iniChat = [
   {
-    role: "system",
-    content:
-      '我希望你扮演英文翻译官，仅当{{your content here}}是"translate:"开头时才翻译文本，并且保持原意，不需要解释，仅当{{your content here}}是"translate:"开头时才翻译文本；',
-  },
-  {
     role: "assistant",
     content: "Hello! How may I assist you today?",
   },
